@@ -13,5 +13,72 @@
 
 require_once 'bdd.php';
 include('header.php');
+
+// on recupere le nombre d'enregistrement.
+$count=$bdd->prepare("SELECT count(id) AS cpt FROM articles");
+$count->setFetchMode(PDO::FETCH_ASSOC);
+$count->execute();
+$Ecount=$count->fetchAll();
+
+@$pages= $_GET['start'];
+$Nbr_element_page = 5;
+$nbr_pages =ceil($Ecount[0]["cpt"]/$Nbr_element_page);
+$debut=($pages-1)*$Nbr_element_page;
+
+
+
+$sel=$bdd->prepare("SELECT article FROM articles ORDER BY date DESC $debut, $Nbr_element_page ");
+$sel->setFetchMode(PDO::FETCH_ASSOC);
+$sel->execute();
+$tab=$sel->fetchAll();
+if(count($tab)==0)
+
 ?>
 
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Articles</title>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <header>
+            <?php echo $Ecount[0]["cpt"];?> "Enregistrement total des articles !"
+        </header>
+
+        <div id='pagination'>
+            <?php 
+                for($i=1;$i<=$nbr_pages;$i++)
+                {
+                    if($pages!=$i)
+                    echo "<a href='?start=$i'>$i</a>&nbsp;";
+                  //  else echo "<a>$i</a>";
+
+                    
+                }            
+            ?>
+        <section id="cont">
+                <?php for($i=0;$i<count($tab);$i++)
+                {
+                    ?>
+                    <div>
+                        <?php echo $tab[$i]["article"]; ?>
+
+                    </div>
+                <?php } ?>
+                
+                           
+        </section>
+        </div>
+            <ul>
+            <?php while($a = $sel->fetch()) {?>
+                <li><?= $a['article'] ?></li>
+                <?php } ?>
+            </ul>
+    </body>
+                       
+                       
+        
+    </body>
+</html>
