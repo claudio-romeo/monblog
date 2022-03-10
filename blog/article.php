@@ -53,14 +53,16 @@ if(count($tab)==0)
                 {
                     if($pages!=$i)
                     echo "<a href='?start=$i'>$i</a>&nbsp;";
-                  //  else echo "<a>$i</a>";
+                   else echo "<a>$i</a>";
 
                     
                 }            
             ?>
         <section id="cont">
                 <?php for($i=0;$i<count($tab);$i++)
+
                 {
+                    
                     ?>
                     <div>
                         <?php echo $tab[$i]["article"]; ?>
@@ -74,7 +76,13 @@ if(count($tab)==0)
             <ul>
             <?php while($a = $sel->fetch()) {?>
                 <li><?= $a['article'] ?></li>
-                <?php } ?>
+                
+                <?php 
+                      
+            } ?>
+
+
+
             </ul>
     </body>
                        

@@ -34,7 +34,7 @@ if (isset($_SESSION['id'])) {
                 
                 $pass2 = ($_POST['pass2']);
                 
-                var_dump('On avance mais ou ?');
+               
                 
                 if ($pass1 != $pass2) 
                 {
@@ -53,8 +53,8 @@ if (isset($_SESSION['id'])) {
                     $edit_pass = $bdd->prepare("UPDATE utilisateurs SET login = ?, password = ?, email = ? WHERE id = ?");
 
                     $edit_pass->execute(array($newlog,$pass1, $newmail, $_SESSION['id']));
-                    var_dump('BOU');
-                    // header("location: pp.php?id=" .$_SESSION['id']);
+                    
+                    header("location: profil.php?id=" . $_SESSION['id']);
                 }
             }
             
@@ -64,7 +64,7 @@ if (isset($_SESSION['id'])) {
 
             if (isset($_POST['newmail']) && !empty($_POST['newmail'])) 
             {
-                var_dump('ca va bien ');
+                
 
                 // $newlog = htmlspecialchars($_POST['login']);
 
@@ -81,7 +81,7 @@ if (isset($_SESSION['id'])) {
                 if (isset($_POST['login']) && !empty($_POST['login']) && $_POST['login'] != $user['login']) 
                 {
 
-                    var_dump('ca va ');
+                    
 
 
                     $newlog = htmlspecialchars($_POST['login']);
@@ -104,12 +104,12 @@ if (isset($_SESSION['id'])) {
     
                     } else 
                     { 
-                        var_dump('ok');
+                 
                         $insert_log = $bdd->prepare("UPDATE utilisateurs SET login = ?, email = ? WHERE id = ?");
     
                         $insert_log->execute(array($newlog, $newmail, $_SESSION['id']));
     
-                        // header("location: edition.php?id=" . $_SESSION['id']);
+                        header("location: profil.php?id=" . $_SESSION['id']);
                         
                      
     
@@ -127,7 +127,7 @@ if (isset($_SESSION['id'])) {
     
                     $insert_log->execute(array($newlog, $newmail, $_SESSION['id']));
     
-                    // header("location: edition.php?id=" . $_SESSION['id']);
+                    header("location: profil.php?id=" . $_SESSION['id']);
                 }
                 }
             
