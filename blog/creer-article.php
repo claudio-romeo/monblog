@@ -14,24 +14,35 @@ if (isset($_SESSION['id'])) {
     $requete->execute(array($_SESSION['id']));
 
     $user = $requete->fetch();
+    // var_dump($_SESSION);
+    
+    $catego = $bdd->prepare("SELECT * FROM `categories`");
+    $catego->setFetchMode(PDO::FETCH_ASSOC);
+    $catego->execute();
+    $categorie_name = $catego->fetchAll();
+    // var_dump($categorie_name);
+
 
 if(isset($_POST['submit']))
     {
+       
         if(!empty($_POST['article_contenu']))
         {
-
             $article_contenu = htmlspecialchars($_POST['article_contenu']);
+            $user_id = htmlspecialchars($_SESSION['id']);
+            $categorie = htmlspecialchars($_POST['categories']);
 
-            $insert = $bdd->prepare("INSERT INTO `articles` ( `article`, `id_utilisateur`, `id_categorie`, `date`) VALUES (?,?,1,NOW())");
-            $insert->execute(array($article_contenu, $_SESSION['id']));
-
+            $insert = $bdd->prepare("INSERT INTO `articles` ( `article`, `id_utilisateur`, `id_categorie`, `date`) VALUES (?,?,?,NOW())");
+            $insert->execute(array($article_contenu, $user_id, $categorie));
+            
+            $erreur = 'Votre article a bien était posté';
             
         }else 
         {
             $erreur = 'Veuillez remplir tout les champs';
         }
     }
-
+  
 
 ?>
 
@@ -40,16 +51,31 @@ if(isset($_POST['submit']))
     <head>
         <title>Articles</title>
         <meta charset="UTF-8">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+        <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous"> -->
+        <link rel="stylesheet" href="style.css">
+
 
 
     </head>
     <body>
-        <form method="POST">
+        <form action="" method="POST">
 
-            <textarea name="article_contenu" placeholder="Contenu de l'article" id="articles"></textarea> <br>
-            <input type="submit" name="submit" value="Envoyer">
-
+            <select name="categories">
+              
+          
+                <option value="">Choisir une catégorie</option>
+                <?php foreach($categorie_name as $value)
+                { ?>
+                <option value="">---</option>
+                    <option value="<?= $value['id']?>">
+                        <?= $value['nom']?>
+                    </option>
+                <?php } ?>
+            </select>
+        
+        <textarea name="article_contenu" placeholder="Contenu de l'article" id="articles"></textarea> <br>
+        
+        <input type="submit" name="submit" value="Envoyer">
             
             <?php
                         if (isset($erreur)) {

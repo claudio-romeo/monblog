@@ -22,48 +22,48 @@ require_once 'bdd.php';
 if (isset($_POST['form_inscription']))
 // si le formulaire est soumis alors 
 {
- 
-    if (!empty($_POST['login']) && !empty($_POST['password']) && !empty($_POST['password2']) && !empty($_POST['email']))
-    {
+
+    if (!empty($_POST['login']) && !empty($_POST['password']) && !empty($_POST['password2']) && !empty($_POST['email'])) {
         // on verifie que tous les champs sont différent de vide et 
-     
+
         if ($_POST['password'] === $_POST['password2'])
         //si les deux mot de pass sont identique alors 
         {
-                        
-            $requete = $bdd->query("SELECT COUNT(*) FROM `utilisateurs` WHERE login = '$_POST[login]'");
+            $login = htmlspecialchars($_POST['login']);
             
-            $requete->execute();
+            $requete = $bdd->prepare("SELECT COUNT(*) FROM `utilisateurs` WHERE login = ?");
+
+            $requete->execute(array($login));
             $result = $requete->fetch();
-           
+
             // on fait une requete en BDD pour compter le nombre de login correspondant a celui rentrer par l'utilisateur
-        
-            if ($result['COUNT(*)'] == 1)
-            { // et on vérifie que le login est bien disponible
-               
+
+            if ($result['COUNT(*)'] == 1) { // et on vérifie que le login est bien disponible
+
                 $erreur = 'Login non disponible !';
             }
             // Si tout est ok alors on inscrit en base de donné 
             else {
-             
+
                 $login = htmlspecialchars($_POST['login']);
                 $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
                 $email = htmlspecialchars($_POST['email']);
-        
-             
-                $requete_insert = $bdd->prepare("INSERT INTO utilisateurs (login, password, email, id_droits) VALUES (?,?,?,?)");
-                $requete_insert->execute(array($login,$password,$email,1));
-               
 
-              
+
+                $requete_insert = $bdd->prepare("INSERT INTO utilisateurs (login, password, email, id_droits) VALUES (?,?,?,?)");
+
+                $requete_insert->execute(array($login, $password, $email, 1));
+
+
+
+
                 // si tout est ok alors on redirige vers la page de connexion 
                 header('location: connexion.php');
             }
         } else {
             $erreur = "Vos password ne correspondent pas !";
         }
-    }  
-    else {
+    } else {
         $erreur = 'Tous les champs doivent être complété !';
     }
 }
@@ -82,7 +82,8 @@ if (isset($_POST['form_inscription']))
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
     <?php
-    // include("link.php") ?>
+    // include("link.php") 
+    ?>
 
     <title>inscription</title>
 </head>
@@ -128,16 +129,16 @@ if (isset($_POST['form_inscription']))
                         <td>
                             <input type="password" placeholder="Confirmer votre mot de pass" id="password2" name="password2"> <br>
                         </td>
-                        
-                        <tr>
+
+                    <tr>
                         <td>
                             <label for="email">Votre Email:</label>
                         </td>
                         <td>
                             <input type="email" placeholder="Email" id="email" name="email"> <br>
                         </td>
-                        </tr>
-                        </td> <br>
+                    </tr>
+                    </td> <br>
                     <tr>
                         <td></td>
                         <td>
@@ -149,11 +150,11 @@ if (isset($_POST['form_inscription']))
             </form>
 
             <?php
-    if (isset($erreur)) {
-      echo '<p style="color:red"> ' . $erreur . '</p>';
-    }
+            if (isset($erreur)) {
+                echo '<p style="color:red"> ' . $erreur . '</p>';
+            }
 
-    ?>
+            ?>
         </div>
         <footer>
             <?php
