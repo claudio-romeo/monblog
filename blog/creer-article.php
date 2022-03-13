@@ -7,7 +7,8 @@ require_once 'bdd.php';
 include('header.php');
 
 
-if (isset($_SESSION['id'])) {
+if (isset($_SESSION['id'])) 
+{
     // Si l'utilisateur est connecté et qu'il a bien un id dans la bdd alors
     $requete = $bdd->prepare("SELECT * FROM utilisateurs WHERE id = ?");
 
@@ -23,25 +24,25 @@ if (isset($_SESSION['id'])) {
     // var_dump($categorie_name);
 
 
-if(isset($_POST['submit']))
-    {
-       
-        if(!empty($_POST['article_contenu']))
+    if(isset($_POST['submit']))
         {
-            $article_contenu = htmlspecialchars($_POST['article_contenu']);
-            $user_id = htmlspecialchars($_SESSION['id']);
-            $categorie = htmlspecialchars($_POST['categories']);
+        
+            if(!empty($_POST['article_contenu']))
+            {
+                $article_contenu = htmlspecialchars($_POST['article_contenu']);
+                $user_id = htmlspecialchars($_SESSION['id']);
+                $categorie = htmlspecialchars($_POST['categories']);
 
-            $insert = $bdd->prepare("INSERT INTO `articles` ( `article`, `id_utilisateur`, `id_categorie`, `date`) VALUES (?,?,?,NOW())");
-            $insert->execute(array($article_contenu, $user_id, $categorie));
-            
-            $erreur = 'Votre article a bien était posté';
-            
-        }else 
-        {
-            $erreur = 'Veuillez remplir tout les champs';
+                $insert = $bdd->prepare("INSERT INTO `articles` ( `article`, `id_utilisateur`, `id_categorie`, `date`) VALUES (?,?,?,NOW())");
+                $insert->execute(array($article_contenu, $user_id, $categorie));
+                
+                $erreur = 'Votre article a bien était posté';
+                
+            }else 
+            {
+                $erreur = 'Veuillez remplir tout les champs';
+            }
         }
-    }
   
 
 ?>
@@ -64,6 +65,7 @@ if(isset($_POST['submit']))
               
           
                 <option value="">Choisir une catégorie</option>
+
                 <?php foreach($categorie_name as $value)
                 { ?>
                 <option value="">---</option>

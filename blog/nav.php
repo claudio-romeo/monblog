@@ -32,7 +32,7 @@ require_once 'bdd.php';
             <li><a href="deconnexion.php">deconnexion</a></li>
             <li><a href="profil.php">profil</a></li>
             <li><a href="creer-article.php">Poster</a></li>
-            <li><a href="article.php">Article</a></li>
+            <li><a href="article.php?start=1">Article</a></li>
             <li><a href="admin.php">admin</a></li>
         <?php
         } else {
@@ -40,7 +40,7 @@ require_once 'bdd.php';
             <li><a href="deconnexion.php">deconnexion</a></li>
             <li><a href="profil.php">profil</a></li>
             <li><a href="creer-article.php">Poster</a></li>
-            <li><a href="article.php">Article</a></li>
+            <li><a href="article.php?start=1">Article</a></li>
             
 
 
