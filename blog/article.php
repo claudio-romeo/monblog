@@ -38,7 +38,7 @@
 
 
 
-    $id_category =$bdd->prepare("SELECT * FROM `categories`");
+    $id_category =$bdd->prepare("SELECT * FROM categories ");
     
     $id_category->setFetchMode(PDO::FETCH_ASSOC);
     
@@ -46,6 +46,8 @@
     
     $id_categorie = $id_category->fetchAll();
     // var_dump($id_categorie);
+
+
 
     
     // on affiche la liste des articles en BDD du plus recent au plus ancien toute categorie confondu
@@ -86,14 +88,31 @@
             <?php }?>
             </select> 
         
-            <form action="" method="get">
+            <form action="" method="GET">
             <button type="submit" value="id" name="categorie">Choisir</button>
             <?php
             if(isset($_GET['categorie']))
             {
-                echo 'ok';
-                // header('location: article.php?start=1');
-            }
+              
+                $select = $bdd->prepare("SELECT 
+
+                nom,
+                article,
+                id_utilisateur,
+                id_categorie,
+                date
+                
+                FROM `categories` 
+                
+                INNER JOIN articles ON articles.id = categories.id");
+
+                $select->execute();
+              
+            } else  
+               
+            
+               
+                // 
             ?>
             </form>
 
